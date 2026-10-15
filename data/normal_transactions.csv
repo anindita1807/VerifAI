@@ -1,0 +1,25 @@
+transaction_id,account_id,timestamp,amount,transaction_type,merchant
+TXN-N001,ACC-N01,2026-09-01 09:15:00,450.00,purchase,Daily Brew Cafe
+TXN-N002,ACC-N01,2026-09-03 13:40:00,1250.00,purchase,Greenleaf Grocers
+TXN-N003,ACC-N01,2026-09-06 19:05:00,899.00,payment,Metro Power Utilities
+TXN-N004,ACC-N01,2026-09-10 11:20:00,2300.00,purchase,Brightline Pharmacy
+TXN-N005,ACC-N01,2026-09-14 18:45:00,640.00,purchase,Daily Brew Cafe
+TXN-N006,ACC-N01,2026-09-19 10:30:00,3100.00,transfer,Savings Pocket
+TXN-N007,ACC-N01,2026-09-24 20:10:00,1780.00,purchase,Greenleaf Grocers
+TXN-N008,ACC-N01,2026-09-28 08:55:00,520.00,purchase,Daily Brew Cafe
+TXN-N009,ACC-N02,2026-09-02 10:00:00,1850.00,purchase,Spiceroute Kitchen
+TXN-N010,ACC-N02,2026-09-04 17:25:00,4200.00,payment,City Rent Collective
+TXN-N011,ACC-N02,2026-09-08 12:15:00,980.00,purchase,Paperleaf Books
+TXN-N012,ACC-N02,2026-09-12 15:50:00,2150.00,purchase,Harbor Hardware
+TXN-N013,ACC-N02,2026-09-16 21:05:00,760.00,purchase,Spiceroute Kitchen
+TXN-N014,ACC-N02,2026-09-21 09:40:00,3500.00,withdrawal,ATM Lakeside
+TXN-N015,ACC-N02,2026-09-25 14:30:00,1320.00,purchase,Greenleaf Grocers
+TXN-N016,ACC-N02,2026-09-29 19:20:00,599.00,payment,Skyline Mobile
+TXN-N017,ACC-N03,2026-09-01 16:10:00,1450.00,purchase,Trailhead Sports
+TXN-N018,ACC-N03,2026-09-05 08:30:00,350.00,purchase,Daily Brew Cafe
+TXN-N019,ACC-N03,2026-09-09 13:00:00,5200.00,payment,Riverbend Insurance
+TXN-N020,ACC-N03,2026-09-13 18:15:00,2650.00,purchase,Harbor Hardware
+TXN-N021,ACC-N03,2026-09-17 11:45:00,870.00,purchase,Paperleaf Books
+TXN-N022,ACC-N03,2026-09-22 20:30:00,1990.00,purchase,Spiceroute Kitchen
+TXN-N023,ACC-N03,2026-09-26 10:05:00,450.00,refund,Trailhead Sports
+TXN-N024,ACC-N03,2026-09-30 17:35:00,3300.00,transfer,Family Wallet

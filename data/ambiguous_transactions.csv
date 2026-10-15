@@ -1,0 +1,8 @@
+transaction_id,account_id,timestamp,amount,transaction_type,merchant
+TXN-A001,ACC-A01,2026-09-03 11:00:00,2200.00,purchase,Greenleaf Grocers
+TXN-A002,ACC-A01,2026-09-10 15:30:00,3100.00,payment,Metro Power Utilities
+TXN-A003,ACC-A01,2026-09-18 12:45:00,120000.00,transfer,Hillview Property Advance
+TXN-A004,ACC-A02,2026-09-05 20:00:00,499.00,payment,StreamBox Media
+TXN-A005,ACC-A02,2026-09-05 20:20:00,499.00,payment,StreamBox Media
+TXN-A006,ACC-A02,2026-09-05 20:45:00,499.00,payment,StreamBox Media
+TXN-A007,ACC-A02,2026-09-14 13:10:00,1850.00,purchase,Paperleaf Books

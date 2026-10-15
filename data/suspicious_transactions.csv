@@ -1,0 +1,18 @@
+transaction_id,account_id,timestamp,amount,transaction_type,merchant
+TXN-S001,ACC-S01,2026-09-01 10:20:00,1200.00,purchase,Greenleaf Grocers
+TXN-S002,ACC-S01,2026-09-04 18:30:00,2450.00,purchase,Harbor Hardware
+TXN-S003,ACC-S01,2026-09-08 09:10:00,850.00,purchase,Daily Brew Cafe
+TXN-S004,ACC-S01,2026-09-12 14:00:00,3400.00,payment,Metro Power Utilities
+TXN-S005,ACC-S01,2026-09-16 20:15:00,1650.00,purchase,Spiceroute Kitchen
+TXN-S006,ACC-S01,2026-09-20 11:40:00,2900.00,transfer,Family Wallet
+TXN-S007,ACC-S01,2026-09-24 02:05:00,185000.00,transfer,Quickpay Wallet Transfer
+TXN-S008,ACC-S01,2026-09-24 02:10:00,4999.00,purchase,Gadget Hub Online
+TXN-S009,ACC-S01,2026-09-24 02:12:00,4999.00,purchase,Gadget Hub Online
+TXN-S010,ACC-S01,2026-09-24 02:14:00,4999.00,purchase,Gadget Hub Online
+TXN-S011,ACC-S01,2026-09-24 02:16:00,4999.00,purchase,Gadget Hub Online
+TXN-S012,ACC-S02,2026-09-02 12:00:00,980.00,purchase,Paperleaf Books
+TXN-S013,ACC-S02,2026-09-06 17:45:00,2100.00,purchase,Greenleaf Grocers
+TXN-S014,ACC-S02,2026-09-11 10:30:00,1500.00,payment,Skyline Mobile
+TXN-S015,ACC-S02,2026-09-15 19:10:00,3200.00,purchase,Trailhead Sports
+TXN-S016,ACC-S02,2026-09-21 13:25:00,760.00,purchase,Daily Brew Cafe
+TXN-S017,ACC-S02,2026-09-27 16:50:00,2750.00,withdrawal,ATM Lakeside

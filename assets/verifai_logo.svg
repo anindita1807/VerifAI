@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="VerifAI logo">
+  <path d="M60 8 L102 22 V56 C102 82 84 101 60 112 C36 101 18 82 18 56 V22 Z" fill="#9B1C31" stroke="#741426" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M60 17 L94 28 V56 C94 77 80 93 60 103 C40 93 26 77 26 56 V28 Z" fill="#FFFCF5"/>
+  <circle cx="54" cy="52" r="20" fill="#F5EBDD" stroke="#4B2E24" stroke-width="5"/>
+  <line x1="69" y1="67" x2="86" y2="84" stroke="#4B2E24" stroke-width="7" stroke-linecap="round"/>
+  <path d="M43 52 L51 60 L66 44" fill="none" stroke="#9B1C31" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

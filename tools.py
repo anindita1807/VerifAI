@@ -426,6 +426,7 @@ def transaction_frequency_detector(transactions: pd.DataFrame, config: AnalysisC
                         "first_timestamp": _fmt_ts(times[start]),
                         "last_timestamp": _fmt_ts(times[end]),
                         "span_minutes": round(span, 1),
+                        "transaction_types": sorted(set(group["transaction_type"].astype(str).tolist()[start : end + 1])),
                         "rule": f">= {cfg.burst_min_count} transactions within {cfg.burst_window_minutes} minutes",
                     },
                     explanation=(
@@ -452,6 +453,7 @@ def transaction_frequency_detector(transactions: pd.DataFrame, config: AnalysisC
                             "amount": round(float(amount), 2),
                             "merchant": str(merchant),
                             "span_minutes": round(span, 1),
+                            "transaction_types": sorted(set(same["transaction_type"].astype(str).tolist()[start : end + 1])),
                             "rule": (
                                 f">= {cfg.repeat_min_count} same-amount, same-merchant transactions "
                                 f"within {cfg.repeat_window_minutes} minutes"

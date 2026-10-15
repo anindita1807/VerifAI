@@ -1,0 +1,8 @@
+# Exact versions that were installed and tested together (Python 3.12).
+streamlit==1.66.0
+langgraph==1.2.15
+groq==1.7.0
+pandas==3.0.2
+pydantic==2.14.1
+python-dotenv==1.2.2
+pytest==9.1.1

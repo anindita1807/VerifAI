@@ -380,10 +380,7 @@ with tab_investigate:
 
 with tab_history:
     st.subheader("Previous investigations")
-    st.caption(
-        "Stored in a local SQLite file (summaries only, never the dataset itself). On Streamlit Community Cloud "
-        "this file is temporary and can be cleared when the app restarts or is redeployed."
-    )
+    
     try:
         records = list_investigations()
     except (sqlite3.Error, OSError) as exc:

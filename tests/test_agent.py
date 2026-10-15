@@ -77,6 +77,16 @@ def test_llm_selection_drives_tools_and_follow_up_is_bounded(suspicious_data):
     assert actors["score_and_aggregate"] == "Python"
 
 
+def test_follow_up_adds_amount_check_when_llm_skips_it(ambiguous_data):
+    txns, logins = ambiguous_data
+    llm = FakeLLM(selection("transaction_frequency_detector"), GOOD_EXPLANATION)
+    result = run_investigation(txns, logins, "ambiguous", MODE_LLM, llm=llm)
+    # The data has an amount >= the fixed threshold, so review_evidence adds the amount check.
+    assert result["executed_tools"] == ["transaction_frequency_detector", "unusual_amount_detector"]
+    assert result["risk"]["score"] == 40
+    assert result["llm_calls"] == 2
+
+
 def test_llm_sees_summary_without_merchant_text(suspicious_data):
     txns, logins = suspicious_data
     llm = FakeLLM(selection("transaction_frequency_detector"), GOOD_EXPLANATION)

@@ -56,7 +56,7 @@ SUSPICIOUS_TEXT_PATTERN = re.compile(
 
 @dataclass(frozen=True)
 class AnalysisConfig:
-    """All thresholds used by the tools. Change them here or in the sidebar."""
+    """All thresholds used by the tools. Change them here."""
 
     min_history: int = 5  # transactions an account needs for a history comparison
     amount_multiplier: float = 3.0  # flag if amount >= multiplier x account median

@@ -360,12 +360,13 @@ def unusual_amount_detector(transactions: pd.DataFrame, config: AnalysisConfig |
                                 "amount": round(amount, 2),
                                 "account_median_of_other_transactions": round(median, 2),
                                 "times_median": round(ratio, 1),
-                                "rule": f">= {cfg.amount_multiplier}x median and >= {cfg.min_unusual_amount:,.0f}",
+                                "rule": f">= {cfg.amount_multiplier}x median and >= INR {cfg.min_unusual_amount:,.0f}",
                                 "timestamp": _fmt_ts(row["timestamp"]),
+                                "transaction_type": str(row["transaction_type"]),
                             },
                             explanation=(
-                                f"Transaction {row['transaction_id']} of {amount:,.2f} is {ratio:.1f} times the median "
-                                f"({median:,.2f}) of the account's other {n - 1} transactions."
+                                f"Transaction {row['transaction_id']} of INR {amount:,.2f} is {ratio:.1f} times the median "
+                                f"(INR {median:,.2f}) of the account's other {n - 1} transactions."
                             ),
                         )
                     )

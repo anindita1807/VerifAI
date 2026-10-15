@@ -1,360 +1,292 @@
-# VerifAI
+# 🛡️ VerifAI — Intelligent Financial Fraud Investigation
 
-**An Agentic AI system for suspicious transaction analysis** (CA3 project, Agentic AI)
+### An AI-powered investigation system combining intelligent agents, evidence-driven analysis, and rule-based fraud detection.
 
-> This application is an educational transaction-analysis prototype. Its risk score is a rule-based indicator, not a probability of fraud. All findings require human review.
+<p align="center">
 
-VerifAI analyses built-in synthetic transaction data and, where available, login events. An LLM agent built with **LangGraph** looks at a numeric summary of the data and **chooses which Python investigation tools to run** from a fixed allowlist. The tools find patterns such as unusually large amounts, bursts of transactions and failed logins. Python then calculates a transparent 0–100 risk score, and the LLM writes a short explanation of the evidence for a human reviewer.
+  **[🚀 Launch Live Application](https://verifai-fraud-investigation.streamlit.app/)**
 
----
+</p>
 
-## Contents
+VerifAI is a financial fraud investigation application designed to analyze transaction activity, identify suspicious indicators, organize supporting evidence, and generate investigation reports. It combines a **Groq-powered LLM agent workflow** with deterministic Python analysis tools, alongside a separate rule-based mode for investigations without LLM calls.
 
-1. [What the project does](#1-what-the-project-does)
-2. [Technology stack](#2-technology-stack)
-3. [Project structure](#3-project-structure)
-4. [Run it on Windows (step by step)](#4-run-it-on-windows-step-by-step)
-5. [Run the tests](#5-run-the-tests)
-6. [Upload to GitHub](#6-upload-to-github)
-7. [Deploy on Streamlit Community Cloud](#7-deploy-on-streamlit-community-cloud)
-8. [How the agent works](#8-how-the-agent-works)
-9. [Risk scoring rules](#9-risk-scoring-rules)
-10. [CSV format](#10-csv-format)
-11. [Built-in datasets](#11-built-in-datasets)
-12. [Groq free tier and LLM usage](#12-groq-free-tier-and-llm-usage)
-13. [Theme and colours](#13-theme-and-colours)
-14. [Troubleshooting](#14-troubleshooting)
-15. [Limitations and ethics](#15-limitations-and-ethics)
+The goal is to make transaction investigations more structured, explainable, and easier to review by presenting findings alongside the evidence that supports them.
+
+> **Note:** VerifAI is a demonstration and educational project. Its outputs are intended to support investigation workflows, not to establish fraud conclusively or replace professional review.
 
 ---
 
-## 1. What the project does
+## ✨ Key Features
 
-- Choose one of three built-in synthetic datasets (uploading your own data is not supported).
-- Preview and validate the data (column checks, timestamps, amounts, duplicates, row count).
-- Click **Investigate Transactions** to run the agent:
-  1. The LLM selects investigation tools from an allowlist (LLM request 1).
-  2. Python validates the choice and runs the tools.
-  3. A bounded follow-up loop adds a missing check if the evidence calls for it.
-  4. Python calculates the rule-based risk score.
-  5. The LLM explains the findings, citing evidence IDs (LLM request 2).
-- See the score, indicators, evidence, limitations, next steps and the **agent execution trace**.
-- Download a Markdown report or a CSV of findings.
-- View or delete past investigations (SQLite).
+- **Dual Operating Modes**
+  - **LLM Agent Mode (Groq):** Uses a language-model-powered agent to coordinate permitted investigation tools and explain the resulting evidence.
+  - **Rule-Based Demo Mode:** Runs rule-based analysis without making LLM calls.
 
-Two operating modes, always clearly labelled:
+- **Built-In Investigation Scenarios**
+  - Normal transactions
+  - Several suspicious indicators
+  - Ambiguous activity with limited evidence
 
-| Mode | Who chooses tools | Who writes the explanation | LLM requests |
-|---|---|---|---|
-| **LLM Agent Mode (Groq)** | The LLM (validated by Python) | The LLM | At most 2 |
-| **Rule-Based Demo Mode** | Fixed Python rules | A Python template | 0 |
+- **Evidence-Driven Analysis**
+  - Examines transaction and available login-event data.
+  - Presents investigation findings with supporting evidence identifiers.
+  - Helps reviewers understand why an activity may warrant further investigation.
 
-If the LLM fails (bad key, rate limit, network), the app shows the error and **does not** silently switch modes. You can choose Rule-Based Demo Mode yourself.
+- **Risk Assessment**
+  - Produces a risk score based on the application's configured analysis logic.
+  - Organizes findings to help reviewers prioritize suspicious activity.
 
-## 2. Technology stack
+- **Investigation Reports**
+  - Downloadable Markdown reports.
+  - Downloadable CSV reports.
 
-| Part | Technology |
-|---|---|
-| Language | Python 3.12 |
-| LLM | `openai/gpt-oss-20b` on the Groq API (free plan) |
-| Agent framework | LangGraph 1.2 |
-| Frontend | Streamlit 1.66 |
-| Data processing | pandas 3.0 |
-| Output validation | Pydantic 2 |
-| Storage | CSV files (input) and SQLite (history) |
-| Testing | pytest |
-| Deployment | Streamlit Community Cloud |
+- **Investigation History**
+  - Uses SQLite to maintain local application investigation history in the deployment environment.
 
-Exact versions are in `requirements.txt`. The model ID, free-plan availability and rate limits were checked against Groq's official documentation on 14 October 2026.
+- **Interactive Web Interface**
+  - Built with Streamlit for browser-based access.
+  - Includes a live deployment so users can explore the application without setting up a local Python environment.
 
-## 3. Project structure
+---
 
+## 🚀 Live Demo
+
+**Try VerifAI here:**
+
+### [Open VerifAI — Live Application](https://verifai-fraud-investigation.streamlit.app/)
+
+Explore the built-in scenarios in both operating modes and compare the resulting findings and evidence.
+
+---
+
+## 🧠 How It Works
+
+VerifAI separates investigation coordination from evidence computation.
+
+1. **Select a scenario**  
+   Choose one of the built-in datasets representing normal activity, suspicious indicators, or ambiguous activity.
+
+2. **Choose an operating mode**  
+   Run the investigation through the Groq-powered LLM agent or use the rule-based demo mode.
+
+3. **Analyze the available data**  
+   Python analysis tools process the transaction data and available login-event information using the application's configured rules.
+
+4. **Coordinate the investigation**  
+   In LLM Agent Mode, the agent can select from permitted tools and use their outputs to formulate an investigation summary.
+
+5. **Review findings and evidence**  
+   Examine the findings, risk score, and supporting evidence identifiers. The results should be reviewed in context rather than treated as definitive proof of fraud.
+
+6. **Export and retain results**  
+   Download the available investigation reports and review saved investigation history.
+
+### High-Level Architecture
+
+```text
+                 ┌──────────────────────────┐
+                 │      Streamlit UI        │
+                 │ Scenario & Mode Selection│
+                 └────────────┬─────────────┘
+                              │
+                 ┌────────────▼─────────────┐
+                 │   Investigation Flow     │
+                 └────────────┬─────────────┘
+                              │
+                ┌─────────────┴─────────────┐
+                │                           │
+       ┌────────▼────────┐        ┌─────────▼────────┐
+       │  LLM Agent Mode │        │ Rule-Based Mode  │
+       │   Groq + Agent  │        │ Python Analysis  │
+       └────────┬────────┘        └─────────┬────────┘
+                │                           │
+                └─────────────┬─────────────┘
+                              │
+                 ┌────────────▼─────────────┐
+                 │  Findings & Risk Score   │
+                 │ Evidence & Investigation │
+                 └────────────┬─────────────┘
+                              │
+                 ┌────────────▼─────────────┐
+                 │ Reports & SQLite History │
+                 └──────────────────────────┘
 ```
+
+*Conceptual architecture illustrating the main application flow.*
+
+---
+
+## 🧰 Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Core application and analysis logic |
+| Streamlit | Interactive web interface |
+| Groq API | Language-model access for LLM Agent Mode |
+| LangGraph | Agent workflow orchestration |
+| Pandas | Tabular data processing |
+| SQLite | Investigation history storage |
+| CSV | Built-in datasets and report export |
+| GitHub | Source-code hosting and version control |
+| Streamlit Community Cloud | Application deployment |
+
+---
+
+## 📂 Project Structure
+
+```text
 VerifAI/
-├── app.py                  Streamlit user interface
-├── agent.py                LangGraph agent: state, nodes, edges, tool allowlist
-├── tools.py                Validation, the 3 investigation tools, risk scoring
-├── groq_service.py         The only file that calls the Groq API
-├── database.py             SQLite investigation history
-├── report_generator.py     Markdown and CSV reports
-├── requirements.txt        Python packages (exact tested versions)
-├── pytest.ini              Test settings
-├── .env.example            Template for your local API key
-├── .gitignore              Keeps secrets and databases out of Git
-├── assets/                 VerifAI logo (SVG and PNG)
-├── .streamlit/
-│   ├── config.toml         Theme colours
-│   └── secrets.toml.example  Template for Streamlit Cloud secrets
-├── data/                   Synthetic datasets (5 CSV files)
-├── tests/                  Automated tests (pytest)
-└── docs/                   CA3 report, rubric mapping, demo script, viva questions
+├── app.py                  # Streamlit application
+├── agent.py                # Agent workflow
+├── groq_service.py         # Groq API integration
+├── tools.py                # Investigation and analysis tools
+├── database.py             # SQLite history management
+├── report_generator.py     # Report generation
+├── requirements.txt        # Python dependencies
+├── pytest.ini              # Test configuration
+├── .env.example            # Environment variable template
+├── assets/                 # Application logo and visual assets
+├── data/                   # Built-in investigation datasets
+├── docs/                   # Project documentation
+└── tests/                  # Automated tests
 ```
 
-## 4. Run it on Windows (step by step)
+---
 
-### 4.1 Install Python and Git (once)
+## ⚙️ Run Locally
 
-1. Install **Python 3.12** from <https://www.python.org/downloads/>. On the first installer screen, tick **"Add python.exe to PATH"**.
-2. Install **Git** from <https://git-scm.com/download/win> (default options are fine).
-3. Install **VS Code** from <https://code.visualstudio.com/> and add the **Python** extension (by Microsoft).
+### Prerequisites
 
-Check in PowerShell:
+- Python installed on your system.
+- Git, if you want to clone the repository.
+- A Groq API key for LLM Agent Mode.
 
-```powershell
-python --version
-git --version
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/anindita1807/VerifAI.git
+cd VerifAI
 ```
 
-### 4.2 Open the project in VS Code
+### 2. Create a virtual environment
 
-1. Unzip `VerifAI.zip`, for example to `C:\Projects\VerifAI`.
-2. In VS Code: **File > Open Folder** and choose the `VerifAI` folder.
-3. Open a terminal: **Terminal > New Terminal** (it opens in the project folder).
+**Windows:**
 
-### 4.3 Create and activate a virtual environment
-
-```powershell
+```bash
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+.venv\Scripts\activate
 ```
 
-You should now see `(.venv)` at the start of the prompt. If PowerShell says *running scripts is disabled*, run this once and try again:
+**macOS / Linux:**
 
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-In VS Code, also pick this interpreter: **Ctrl+Shift+P > Python: Select Interpreter > .venv**.
+### 3. Install dependencies
 
-### 4.4 Install the dependencies
-
-```powershell
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
 ```
 
-### 4.5 Add your Groq API key (for LLM Agent Mode)
+### 4. Configure the Groq API key
 
-1. Create a free account at <https://console.groq.com> and open **API Keys > Create API Key**. Copy the key.
-2. Create your local `.env` file from the template:
+For local development, create a `.env` file using `.env.example` as a reference, and add your key according to the configuration expected by the application.
 
-   ```powershell
-   Copy-Item .env.example .env
-   ```
+Keep `.env` out of version control. Never commit API keys to GitHub.
 
-3. Open `.env` in VS Code and replace `your_groq_api_key_here` with your key:
+### 5. Launch the application
 
-   ```
-   GROQ_API_KEY=gsk_your_real_key
-   GROQ_MODEL=openai/gpt-oss-20b
-   ```
-
-`.env` is listed in `.gitignore`, so Git will not upload it. Never put the key in a `.py` file.
-
-Without a key the app still runs; you can use Rule-Based Demo Mode.
-
-### 4.6 Run the app
-
-```powershell
-python -m streamlit run app.py
+```bash
+streamlit run app.py
 ```
 
-Your browser opens at <http://localhost:8501>. Stop the app with **Ctrl+C** in the terminal.
+Streamlit will provide a local URL in the terminal. Open that URL in your browser.
 
-## 5. Run the tests
+**Rule-Based Demo Mode** can be used without making LLM calls. LLM Agent Mode requires valid Groq configuration.
 
-```powershell
-python -m pytest -v
+---
+
+## ☁️ Deployment
+
+VerifAI is deployed using **Streamlit Community Cloud** and its source code is hosted on GitHub.
+
+**Live application:** [https://verifai-fraud-investigation.streamlit.app/](https://verifai-fraud-investigation.streamlit.app/)
+
+For your own deployment:
+
+1. Push the project files to a GitHub repository.
+2. Connect the repository to Streamlit Community Cloud.
+3. Set the main file path to `app.py`.
+4. Add required secrets in the app's Streamlit settings.
+
+For Groq integration, the secret is configured in TOML format:
+
+```toml
+GROQ_API_KEY = "your_groq_api_key"
 ```
 
-The tests never call the real Groq API and need no key. LLM calls are replaced by a fake LLM, a fake HTTP transport, or a small local mock server, so they use no quota. They cover validation, all three tools, scoring boundaries and capping, tool-selection validation, the LangGraph workflow, rate-limit and API error handling, SQLite, reports, and the Streamlit app itself (using Streamlit's AppTest, which checks behaviour, not visual appearance).
+Replace the example value with your own key. Do not put real secrets in this README or in source code.
 
-Result when the project was built (Python 3.12, fresh virtual environment): **58 passed**. Run the command yourself and keep a screenshot of your own output as evidence.
+---
 
-## 6. Upload to GitHub
+## 🔐 Security and Responsible Use
 
-1. Create an **empty** repository on <https://github.com/new> (no README, no .gitignore), for example `VerifAI`.
-2. In the VS Code terminal (inside the project folder):
+- **Protect API credentials:** Store secrets in Streamlit Secrets or appropriate environment variables.
+- **Use synthetic demonstration data:** The built-in scenarios are intended for exploring application functionality, not for validating the system against real-world fraud cases.
+- **Review evidence carefully:** Suspicious indicators are signals for further investigation, not proof of wrongdoing.
+- **Keep human oversight:** Financial decisions should involve appropriate human review and established organizational controls.
+- **Understand deployment persistence:** Local SQLite files on cloud hosting may not provide permanent storage across restarts or redeployments unless persistent storage is configured.
 
-   ```powershell
-   git init
-   git add .
-   git status
-   ```
+---
 
-   Check the `git status` list: `.env`, `.venv` and `*.db` must **not** appear. If `.env` appears, stop and check `.gitignore`.
+## 🎯 Project Objectives
 
-3. Commit and push (replace `YOUR-USERNAME`):
+VerifAI demonstrates how AI-agent orchestration can be combined with conventional Python analysis in a financial investigation workflow.
 
-   ```powershell
-   git commit -m "VerifAI - CA3 Agentic AI project"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/VerifAI.git
-   git push -u origin main
-   ```
+Its main objectives are to:
 
-## 7. Deploy on Streamlit Community Cloud
+- Explore the use of LLM agents for coordinating investigation steps.
+- Keep analytical computations grounded in tool-generated evidence.
+- Provide a rule-based alternative for comparison and demonstrations.
+- Present risk findings and evidence in a reviewable format.
+- Generate structured reports to support investigation documentation.
 
-1. Push the project to GitHub (section 6). A **public** repository is simplest.
-2. Go to <https://share.streamlit.io> and sign in with GitHub.
-3. Click **Create app** and choose **Deploy a public app from GitHub**, then fill in:
-   - Repository: `YOUR-USERNAME/VerifAI`
-   - Branch: `main`
-   - Main file path: `app.py`
-   - App URL: choose a name, e.g. `verifai`
-4. Open **Advanced settings**:
-   - **Python version:** choose **3.12** (the version used for testing).
-   - **Secrets:** paste the contents of `.streamlit/secrets.toml.example` with your real key:
+---
 
-     ```toml
-     GROQ_API_KEY = "gsk_your_real_key"
-     GROQ_MODEL = "openai/gpt-oss-20b"
-     ```
+## 🔮 Future Enhancements
 
-5. Click **Deploy**. The first build takes a few minutes.
-6. **Test the public URL:** open it in a private/incognito window, run the *Several suspicious indicators* dataset in LLM Agent Mode, and confirm that the trace shows `LLM (openai/gpt-oss-20b)` for `select_tools` and `explain_with_llm`.
+Potential directions for future development include:
 
-To change secrets later: open your app, then **⋮ > Settings > Secrets**. The app reads `st.secrets["GROQ_API_KEY"]` on Streamlit Cloud and `.env` locally.
+- Secure ingestion of approved transaction datasets.
+- Expanded fraud-pattern and anomaly-detection techniques.
+- Additional evidence correlation and investigation workflows.
+- Improved explainability and audit trails.
+- More comprehensive automated testing and evaluation against labeled datasets.
+- Persistent cloud storage and access controls for multi-user deployments.
 
-**Important:**
-- The deployed app works only while Groq is reachable and your free-tier quota has capacity.
-- **History is not durable on Streamlit Cloud.** The SQLite file lives on the app's temporary disk and can be wiped when the app restarts, goes to sleep or is redeployed. The app keeps working if history is lost.
-- Free apps go to sleep after a period without visitors; the first visit then takes a moment to wake up.
+These are potential enhancements, not features currently claimed as implemented.
 
-## 8. How the agent works
+---
 
-```
-START
-  -> validate_input        invalid data / no key ------------------> finalize
-  -> summarize_dataset     (numbers only; merchant names never sent to the LLM)
-  -> select_tools          LLM request 1 (or fixed rules in demo mode)
-                           LLM error / no valid tool -------------> finalize
-  -> execute_tools         runs ONLY allowlisted Python functions
-  -> review_evidence       follow-up needed? -> execute_tools (max 2 rounds)
-  -> score_and_aggregate   deterministic score, limitations, next steps
-  -> explain_with_llm      LLM request 2   (LLM mode)
-     or rule_based_summary Python template (demo mode)
-  -> finalize -> END
-```
+## 👩‍💻 Author
 
-- **State:** a `TypedDict` (`AgentState` in `agent.py`) holding the data, selected tools, tool results, score, trace and counters.
-- **Nodes:** plain Python functions, each returning an update to the state.
-- **Edges:** fixed edges plus four conditional edges (the routing functions `after_validation`, `after_selection`, `after_review`, `after_scoring`).
-- **Tool allowlist:** `ALLOWED_TOOLS` in `agent.py`. The LLM can only name tools; Python validates the names with Pydantic and rejects anything else. The LLM cannot run code, SQL or file operations.
-- **Bounded:** at most 2 LLM requests, at most 2 follow-up rounds, and only 3 tools exist.
-- **Evidence check:** evidence IDs cited by the LLM are compared with the real tool results; invented IDs are removed.
+**Anindita Bandopadhyaya**
 
-## 9. Risk scoring rules
+Developer of VerifAI — Intelligent Financial Fraud Investigation.
 
-The score is calculated only in Python (`calculate_risk_score` in `tools.py`). The LLM cannot change it.
+- **GitHub:** [@anindita1807](https://github.com/anindita1807)
+- **Live Project:** [Launch VerifAI](https://verifai-fraud-investigation.streamlit.app/)
 
-| Indicator | Points | Overlap group |
-|---|---|---|
-| Amount far above the account's usual spending | 25 | amount |
-| Amount above the fixed review threshold | 15 | amount |
-| Many transactions in a short time | 20 | frequency |
-| Repeated identical transactions | 15 | frequency |
-| Repeated failed logins | 20 | login failures |
-| Transaction soon after failed logins | 25 | login to transaction |
-| Indicators from 2 or more different tools (bonus) | 10 | bonus |
+---
 
-1. Each indicator counts **once**, however many times it appears.
-2. Within an overlap group only the **highest** indicator counts (no double counting).
-3. Add the bonus if two or more different tools found something.
-4. **Cap at 100.**
+## 📄 License
 
-Bands: **0–29 Low, 30–59 Medium, 60–79 High, 80–100 Critical.** These weights and thresholds are illustrative choices for a demonstration, not industry standards, and they are not statistically validated. The thresholds are fixed defaults defined in `AnalysisConfig` in `tools.py`.
+No license has been specified for this repository yet. If you plan to distribute or reuse the project publicly, consider adding an appropriate open-source license after reviewing the dependencies and ownership requirements.
 
-## 10. Data format
+---
 
-The built-in datasets in `data/` follow this format (uploading your own CSV is not supported in the app).
-
-**Transactions**
-
-| Column | Type | Rules |
-|---|---|---|
-| `transaction_id` | text | required, unique |
-| `account_id` | text | required |
-| `timestamp` | date-time | `YYYY-MM-DD HH:MM:SS` (ISO 8601) |
-| `amount` | number | greater than 0 (INR) |
-| `transaction_type` | text | one of `purchase`, `transfer`, `withdrawal`, `payment`, `deposit`, `refund` |
-| `merchant` | text | required |
-
-**Login events (optional, separate file)**
-
-| Column | Type | Rules |
-|---|---|---|
-| `event_id` | text | required, unique |
-| `account_id` | text | required |
-| `timestamp` | date-time | `YYYY-MM-DD HH:MM:SS` |
-| `status` | text | `success` or `failed` |
-| `location` | text | optional |
-
-Each file is validated before use. Invalid rows are reported with their CSV line numbers; they are never silently dropped.
-
-## 11. Built-in datasets
-
-| Dataset | Files | Rule-based result |
-|---|---|---|
-| Normal transactions | `normal_transactions.csv`, `normal_login_events.csv` | 0 / 100, Low |
-| Several suspicious indicators | `suspicious_transactions.csv`, `suspicious_login_events.csv` | 100 / 100, Critical |
-| Ambiguous activity, limited evidence | `ambiguous_transactions.csv` (no login file) | 40 / 100, Medium, with 3 limitations |
-
-All data is invented. In LLM mode the score can differ from this table only if the LLM skips a tool; the trace and limitations always show which tools ran.
-
-## 12. Groq free tier and LLM usage
-
-Groq's documented Free Plan limits for `openai/gpt-oss-20b` (checked 14 October 2026): **30 requests/minute, 1,000 requests/day, 8,000 tokens/minute, 200,000 tokens/day**. Limits apply to your whole Groq organisation and can change; check <https://console.groq.com/docs/rate-limits>.
-
-How the app saves quota:
-
-- No LLM request when the app opens, or when you preview data.
-- At most **2 requests per investigation**; **no automatic retries** (`max_retries=0`).
-- Only a compact numeric summary and the findings (IDs and numbers) are sent, never the whole CSV.
-- `reasoning_effort="low"`, a 1,200-token output cap and a 20-second timeout.
-- Clicking **Investigate Transactions** again with the same data and mode reuses the previous result instead of calling the API.
-
-If Groq retires the model, set `GROQ_MODEL` (in `.env` or Streamlit secrets) to a current model that supports JSON Schema mode; check <https://console.groq.com/docs/models>.
-
-## 13. Theme and colours
-
-The palette is set in `.streamlit/config.toml`, with a little extra CSS at the top of `app.py`.
-
-| Role | Colour |
-|---|---|
-| Cherry red (primary accent, buttons) | `#9B1C31` |
-| Deep cherry red (hover, strong accent) | `#741426` |
-| Cream (sidebar, panels) | `#F5EBDD` |
-| Ivory (page background) | `#FFFCF5` |
-| Coffee brown (headings, text) | `#4B2E24` |
-| Light coffee / tan (borders) | `#D8C3A5` |
-| Muted brown (secondary text) | `#79665A` |
-
-Fonts: Spectral (headings) and Work Sans (body), loaded from Google Fonts. The logo (shield, magnifying glass and checkmark) is in `assets/`. Risk categories are always written as text, not shown by colour alone.
-
-## 14. Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| `python` not recognised | Reinstall Python and tick "Add python.exe to PATH", then reopen VS Code. |
-| `Activate.ps1 cannot be loaded` | Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. |
-| `ModuleNotFoundError` | Activate `.venv` and run `python -m pip install -r requirements.txt`. |
-| Sidebar says "No GROQ_API_KEY found" | Check `.env` is in the project folder (not `.env.example`) and restart the app. On Streamlit Cloud, check **Settings > Secrets**. |
-| "Groq rejected the API key" | Create a new key in the Groq console and update `.env` or secrets. |
-| "rate limit was reached" | Wait a minute (or until the daily limit resets). Use Rule-Based Demo Mode meanwhile. |
-| "model ... was not found" | The model was retired. Set `GROQ_MODEL` to a supported model. |
-| "Could not reach Groq" | Check your internet connection or firewall. |
-| Port 8501 already in use | `python -m streamlit run app.py --server.port 8502` |
-| Dataset fails validation | Read the listed line numbers and compare with section 10. |
-| Streamlit Cloud build fails | Check the build logs; choose Python 3.12 in Advanced settings; confirm `requirements.txt` is at the repository root. |
-| History disappeared on Streamlit Cloud | Expected: the SQLite file is temporary there (see section 7). |
-
-## 15. Limitations and ethics
-
-- Synthetic data only; the app has no upload option.
-- The score is a rule-based indicator, not a fraud probability, and the thresholds are not validated.
-- A pattern is not proof. Large amounts, bursts and logins can all have innocent explanations.
-- Missing login data is reported as missing evidence, never as normal activity.
-- The LLM can make mistakes; its text is labelled and its evidence IDs are checked.
-- In LLM mode a numeric summary and the findings are sent to Groq (a third-party service).
-- The tool never blocks accounts or takes any action; a human reviewer decides.
+<p align="center">
+  <b>VerifAI — Turning transaction signals into structured, evidence-driven investigations.</b>
+</p>

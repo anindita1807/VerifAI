@@ -1,5 +1,5 @@
 """
-tools.py - Deterministic Python tools used by the FraudSleuth AI agent.
+tools.py - Deterministic Python tools used by the VerifAI agent.
 
 Everything in this file is plain Python + pandas. No LLM is used here.
 

@@ -378,6 +378,25 @@ with tab_investigate:
 # History tab
 # ---------------------------------------------------------------------------
 
+SHORT_FINDINGS = {
+    "Amount far above the account's usual spending": "Unusual amount",
+    "Amount above the fixed review threshold": "High amount",
+    "Many transactions in a short time": "Burst",
+    "Repeated identical transactions": "Repeats",
+    "Repeated failed logins": "Failed logins",
+    "Transaction soon after failed logins": "Txn after failed logins",
+    "No rule-based indicators found.": "None found",
+}
+
+
+def short_findings(text: str) -> str:
+    """Shorter findings text for the History table (the stored summary is unchanged)."""
+    if text.startswith("Not completed"):
+        return text
+    parts = [p.strip() for p in text.split(";")]
+    return ", ".join(SHORT_FINDINGS[p] for p in parts if p in SHORT_FINDINGS) or text
+
+
 with tab_history:
     st.subheader("Previous investigations")
     
@@ -390,7 +409,11 @@ with tab_history:
         if not records:
             st.write("No investigations yet. Run one from the Investigate tab and it will appear here.")
         else:
-            table = pd.DataFrame(records).rename(
+            table = pd.DataFrame(records)
+            table["mode"] = table["mode"].map({MODE_LLM: "LLM Agent Mode", MODE_RULE_BASED: "Rule-Based Demo Mode"}).fillna(table["mode"])
+            table["model"] = table["model"].fillna("No LLM used")
+            table["findings_summary"] = table["findings_summary"].apply(short_findings)
+            table = table.rename(
                 columns={
                     "investigation_id": "ID",
                     "created_at": "Date and time",
@@ -404,7 +427,18 @@ with tab_history:
                     "status": "Status",
                 }
             )
-            st.dataframe(table, hide_index=True, width="stretch")
+            st.dataframe(
+                table,
+                hide_index=True,
+                width="stretch",
+                column_config={
+                    "Dataset": st.column_config.TextColumn(width=270),
+                    "Findings": st.column_config.TextColumn(width=460),
+                    "Mode": st.column_config.TextColumn(width="medium"),
+                    "Model": st.column_config.TextColumn(width="medium"),
+                    "Status": st.column_config.TextColumn(width="medium"),
+                },
+            )
             h1, h2 = st.columns(2)
             with h1:
                 to_delete = st.selectbox("Delete one record", [r["investigation_id"] for r in records], key="delete_choice")

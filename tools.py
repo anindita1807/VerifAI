@@ -452,6 +452,8 @@ def transaction_frequency_detector(transactions: pd.DataFrame, config: AnalysisC
                             "transaction_count": count,
                             "amount": round(float(amount), 2),
                             "merchant": str(merchant),
+                            "first_timestamp": _fmt_ts(s_times[start]),
+                            "last_timestamp": _fmt_ts(s_times[end]),
                             "span_minutes": round(span, 1),
                             "transaction_types": sorted(set(same["transaction_type"].astype(str).tolist()[start : end + 1])),
                             "rule": (

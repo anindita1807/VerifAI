@@ -380,10 +380,11 @@ def unusual_amount_detector(transactions: pd.DataFrame, config: AnalysisConfig |
                             "amount": round(amount, 2),
                             "threshold": cfg.high_amount_threshold,
                             "timestamp": _fmt_ts(row["timestamp"]),
+                            "transaction_type": str(row["transaction_type"]),
                         },
                         explanation=(
-                            f"Transaction {row['transaction_id']} of {amount:,.2f} is at or above the fixed review "
-                            f"threshold of {cfg.high_amount_threshold:,.0f}. A large amount alone does not indicate fraud."
+                            f"Transaction {row['transaction_id']} of INR {amount:,.2f} is at or above the fixed review "
+                            f"threshold of INR {cfg.high_amount_threshold:,.0f}. A large amount alone does not indicate fraud."
                         ),
                     )
                 )
@@ -457,7 +458,7 @@ def transaction_frequency_detector(transactions: pd.DataFrame, config: AnalysisC
                             ),
                         },
                         explanation=(
-                            f"Account {account_id} made {count} transactions of {float(amount):,.2f} to the same "
+                            f"Account {account_id} made {count} transactions of INR {float(amount):,.2f} to the same "
                             f"merchant within {span:.0f} minute(s). This can be legitimate (e.g. split payments) "
                             "or a sign of duplicate or automated charges."
                         ),
@@ -542,7 +543,7 @@ def login_activity_checker(
                         "rule": f"transactions within {cfg.login_to_transaction_minutes} minutes after the login",
                     },
                     explanation=(
-                        f"{len(txn_ids)} transaction(s) totalling {total:,.2f} occurred within "
+                        f"{len(txn_ids)} transaction(s) totalling INR {total:,.2f} occurred within "
                         f"{cfg.login_to_transaction_minutes} minutes after the successful login that followed the "
                         "failed attempts. This is a time association, not proof of cause."
                     ),

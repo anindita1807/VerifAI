@@ -361,6 +361,9 @@ def build_graph(llm: LLMClient | None = None):
                 if name not in executed:
                     followup.append(name)
                     reasons[name] = "Follow-up rule: login indicators were found, so the related transactions are checked too."
+        if "unusual_amount_detector" not in executed and state["dataset_summary"]["amount_max"] >= state["config"].high_amount_threshold:
+            followup.append("unusual_amount_detector")
+            reasons["unusual_amount_detector"] = "Follow-up rule: the data contains an amount at or above the fixed review threshold, so the amount check is needed."
         followup = list(dict.fromkeys(followup))
         if followup:
             rounds += 1

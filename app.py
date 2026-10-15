@@ -21,7 +21,7 @@ import streamlit as st
 from agent import MODE_LLM, MODE_RULE_BASED, TOOL_DESCRIPTIONS, run_investigation
 from database import clear_history, delete_investigation, list_investigations, save_investigation
 from groq_service import GroqService, LLMServiceError, get_api_key, get_model_name
-from report_generator import build_findings_csv, build_markdown_report
+from report_generator import DISCLAIMER, build_findings_csv, build_markdown_report
 from tools import (
     ALLOWED_LOGIN_STATUSES,
     ALLOWED_TRANSACTION_TYPES,
@@ -109,6 +109,11 @@ def esc(value: object) -> str:
     return html.escape(str(value))
 
 
+def llm_text(value: object) -> str:
+    """Show LLM text as written: escape $ so Streamlit does not treat it as maths."""
+    return str(value).replace("$", "\\$")
+
+
 def show_validation(result: ValidationResult, label: str) -> None:
     if result.is_valid:
         st.success(f"{label}: {len(result.data)} rows passed validation.")
@@ -160,6 +165,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown(f'<div class="fs-disclaimer">{esc(DISCLAIMER)}</div>', unsafe_allow_html=True)
+
 tab_investigate, tab_history, tab_how = st.tabs(["Investigate", "History", "How it works"])
 
 # ---------------------------------------------------------------------------
@@ -209,14 +216,14 @@ def render_result(result: dict) -> None:
     if result.get("llm_explanation"):
         exp = result["llm_explanation"]
         st.caption(f"Written by the LLM ({result['model']}) from the Python findings below.")
-        st.write(exp["summary"])
+        st.write(llm_text(exp["summary"]))
         for obs in exp["key_observations"]:
             ids = f"  \nEvidence: {', '.join(obs['evidence_ids'])}" if obs["evidence_ids"] else ""
-            st.markdown(f"- {obs['statement']}{ids}")
+            st.markdown(f"- {llm_text(obs['statement'])}{ids}")
         if exp["caveats"]:
             st.markdown("**Caveats noted by the LLM**")
             for c in exp["caveats"]:
-                st.markdown(f"- {c}")
+                st.markdown(f"- {llm_text(c)}")
     elif result.get("rule_based_summary"):
         st.caption("Rule-based template summary. No LLM was used.")
         st.write(result["rule_based_summary"])
@@ -242,7 +249,7 @@ def render_result(result: dict) -> None:
         reason = result["tool_reasons"].get(tool["tool_name"], "")
         with st.expander(f"{tool['tool_name']}: {len(tool['findings'])} finding(s), status {tool['status']}", expanded=bool(tool["findings"])):
             if reason:
-                st.markdown(f"Why it ran: {reason}")
+                st.markdown(f"Why it ran: {llm_text(reason)}")
             st.write(tool["explanation"])
             for f in tool["findings"]:
                 label = INDICATOR_LABELS.get(f["indicator"], f["indicator"])

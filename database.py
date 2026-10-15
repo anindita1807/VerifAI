@@ -1,7 +1,7 @@
 """
 database.py - SQLite storage for investigation history.
 
-Only a short summary of each investigation is stored. Uploaded datasets,
+Only a short summary of each investigation is stored. Datasets,
 API keys and raw records are never saved. All SQL uses ? placeholders
 (parameterised queries).
 
@@ -17,7 +17,7 @@ from contextlib import closing
 from pathlib import Path
 from typing import Any
 
-DEFAULT_DB_PATH = Path(__file__).resolve().parent / "fraudsleuth_history.db"
+DEFAULT_DB_PATH = Path(__file__).resolve().parent / "verifai_history.db"
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS investigations (
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS investigations (
 
 
 def get_db_path() -> Path:
-    """Database location; override with the FRAUDSLEUTH_DB_PATH environment variable."""
-    return Path(os.getenv("FRAUDSLEUTH_DB_PATH", str(DEFAULT_DB_PATH)))
+    """Database location; override with the VERIFAI_DB_PATH environment variable."""
+    return Path(os.getenv("VERIFAI_DB_PATH", str(DEFAULT_DB_PATH)))
 
 
 def _connect(db_path: Path | str) -> sqlite3.Connection:

@@ -1,0 +1,38 @@
+# FraudSleuth AI theme: cherry red, cream, ivory and coffee brown.
+# Change the colours here; app.py only adds a little extra CSS.
+
+[theme]
+base = "light"
+primaryColor = "#9B1C31"              # cherry red: buttons, highlights
+backgroundColor = "#FFFCF5"           # ivory: page background
+secondaryBackgroundColor = "#F5EBDD"  # cream: sidebar, inputs, panels
+textColor = "#4B2E24"                 # coffee brown: main text
+linkColor = "#741426"                 # deep cherry red
+borderColor = "#D8C3A5"               # light coffee / tan
+dataframeHeaderBackgroundColor = "#F5EBDD"
+baseRadius = "0.4rem"
+font = "Work Sans:https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap, sans-serif"
+headingFont = "Spectral:https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&display=swap, serif"
+# Status colours (alerts and badges) kept inside the warm palette
+redColor = "#9B1C31"
+redBackgroundColor = "#F6E1E2"
+redTextColor = "#741426"
+blueColor = "#79665A"
+blueBackgroundColor = "#F5EBDD"
+blueTextColor = "#4B2E24"
+orangeColor = "#9A6A1F"
+orangeBackgroundColor = "#F8ECD4"
+orangeTextColor = "#6B4A14"
+yellowColor = "#9A6A1F"
+yellowBackgroundColor = "#F8ECD4"
+yellowTextColor = "#6B4A14"
+greenColor = "#5C6B3A"
+greenBackgroundColor = "#EDEEDD"
+greenTextColor = "#3F4A27"
+chartCategoricalColors = ["#9B1C31", "#4B2E24", "#C08A5B", "#741426", "#79665A", "#D8C3A5", "#5C6B3A", "#9A6A1F", "#B85C6B", "#2F1D17"]
+
+[server]
+maxUploadSize = 2          # MB; matches MAX_UPLOAD_BYTES in tools.py
+
+[browser]
+gatherUsageStats = false

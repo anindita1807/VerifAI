@@ -1,5 +1,5 @@
 """
-agent.py - The FraudSleuth AI agent, built with LangGraph.
+agent.py - The VerifAI agent, built with LangGraph.
 
 Graph (nodes are functions, arrows are edges; [?] marks a conditional edge):
 

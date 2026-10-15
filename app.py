@@ -21,7 +21,7 @@ import streamlit as st
 from agent import MODE_LLM, MODE_RULE_BASED, TOOL_DESCRIPTIONS, run_investigation
 from database import clear_history, delete_investigation, list_investigations, save_investigation
 from groq_service import GroqService, LLMServiceError, get_api_key, get_model_name
-from report_generator import DISCLAIMER, build_findings_csv, build_markdown_report
+from report_generator import build_findings_csv, build_markdown_report
 from tools import (
     ALLOWED_LOGIN_STATUSES,
     ALLOWED_TRANSACTION_TYPES,
@@ -165,7 +165,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown(f'<div class="fs-disclaimer">{esc(DISCLAIMER)}</div>', unsafe_allow_html=True)
+
 
 tab_investigate, tab_history, tab_how = st.tabs(["Investigate", "History", "How it works"])
 

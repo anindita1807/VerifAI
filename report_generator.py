@@ -59,7 +59,7 @@ def build_markdown_report(result: dict[str, Any]) -> str:
         add("")
         add(f"- Accounts: {summary.get('account_count')}")
         add(f"- Date range: {summary.get('date_range', ['', ''])[0]} to {summary.get('date_range', ['', ''])[1]}")
-        add(f"- Amount range: {summary.get('amount_min'):,} to {summary.get('amount_max'):,} (median {summary.get('amount_median'):,})")
+        add(f"- Amount range: INR {summary.get('amount_min'):,} to INR {summary.get('amount_max'):,} (median INR {summary.get('amount_median'):,})")
         add(f"- Login data available: {'Yes' if summary.get('login_data_available') else 'No'}")
         add("")
 

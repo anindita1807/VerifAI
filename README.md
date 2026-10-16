@@ -319,12 +319,5 @@ Developer of VerifAI — Intelligent Financial Fraud Investigation.
 
 ---
 
-## 📄 License
 
-No license has been specified for this repository yet. If you plan to distribute or reuse the project publicly, consider adding an appropriate open-source license after reviewing the dependencies and ownership requirements.
-
----
-
-<p align="center">
-  <b>VerifAI — Turning transaction signals into structured, evidence-driven investigations.</b>
 </p>
